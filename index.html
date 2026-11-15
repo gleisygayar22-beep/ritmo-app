@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>RITMO | Tu vida, en movimiento</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-mark">R</span>
+      <span>RITMO</span>
+    </a>
+    <span class="tagline">Tu vida, en movimiento.</span>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <p class="menu-label">MI ESPACIO</p>
+      <button class="nav-item active" data-section="organizacion">▦ <span>Mi organización</span></button>
+      <button class="nav-item" data-section="progreso">◷ <span>Mi progreso</span></button>
+      <button class="nav-item" data-section="retos">◇ <span>Mis retos</span></button>
+      <button class="nav-item" data-section="compartidos">◎ <span>Retos compartidos</span></button>
+      <div class="sidebar-bottom">
+        <span class="small-dot"></span> Tu espacio, a tu ritmo
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="welcome">
+        <div>
+          <p class="eyebrow">TU ESPACIO PERSONAL</p>
+          <h1 id="page-title">Mi organización</h1>
+          <p id="page-description">Organiza tus tareas y dale espacio a lo importante.</p>
+        </div>
+        <div class="today" id="today"></div>
+      </div>
+
+      <div id="section-content"></div>
+      <footer>RITMO · Tu vida, en movimiento.</footer>
+    </section>
+  </main>
+
+  <nav class="mobile-nav">
+    <button class="active" data-section="organizacion">▦<span>Organiza</span></button>
+    <button data-section="progreso">◷<span>Progreso</span></button>
+    <button data-section="retos">◇<span>Retos</span></button>
+    <button data-section="compartidos">◎<span>Compartidos</span></button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
