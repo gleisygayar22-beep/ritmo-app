@@ -1,105 +1,360 @@
+:root {
+  --primary: #7656d6;
+  --primary-dark: #6040bd;
+  --primary-light: #f0ebff;
+  --background: #f7f7fb;
+  --surface: #ffffff;
+  --text: #29263a;
+  --muted: #858196;
+  --border: #eceaf2;
+  --success: #35a879;
+  --shadow: 0 4px 18px rgba(44, 32, 85, 0.06);
+}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#7256d8">
-  <title>RITMO | Tu vida, en movimiento</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">R</span>
-        <div>
-          <h1>RITMO</h1>
-          <p>Tu vida, en movimiento</p>
-        </div>
-      </div>
-      <span id="today"></span>
-    </header>
+* {
+  box-sizing: border-box;
+}
 
-    <div class="layout">
-      <aside class="sidebar">
-        <p class="menu-label">MENÚ PRINCIPAL</p>
-        <button class="nav-button active" data-section="organization">Mi organización</button>
-        <button class="nav-button" data-section="progress">Mi progreso</button>
-        <button class="nav-button" data-section="challenges">Mis retos</button>
-        <button class="nav-button" data-section="shared">Retos compartidos</button>
-      </aside>
+body {
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--background);
+  color: var(--text);
+  line-height: 1.5;
+}
 
-      <main class="content">
-        <section id="organization" class="section active">
-          <h2>Mi organización</h2>
-          <p class="subtitle">Organiza tus tareas y avanza a tu ritmo.</p>
+button,
+input {
+  font: inherit;
+}
 
-          <form id="task-form" class="task-form">
-            <input id="task-input" type="text" placeholder="¿Qué tienes pendiente?" required>
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 22px 6%;
+}
 
-            <div class="task-options">
-              <label>Fecha límite
-                <input id="task-date" type="date">
-              </label>
+header h1 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
 
-              <label>Prioridad
-                <select id="task-priority">
-                  <option value="Media">Media</option>
-                  <option value="Alta">Alta</option>
-                  <option value="Baja">Baja</option>
-                </select>
-              </label>
+header p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
 
-              <label>Categoría
-                <select id="task-category"></select>
-              </label>
-            </div>
+nav {
+  display: flex;
+  gap: 10px;
+  padding: 16px 6%;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
 
-            <div class="category-creator">
-              <input id="new-category" type="text" placeholder="Nombre de una nueva categoría">
-              <button type="button" id="add-category">+ Crear categoría</button>
-            </div>
+nav button,
+[data-section] {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 11px 17px;
+  border-radius: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-            <div id="category-list"></div>
-            <button type="submit">+ Añadir tarea</button>
-          </form>
+nav button:hover,
+[data-section]:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
 
-          <div class="task-summary">
-            <span id="pending-count">0 tareas pendientes</span>
-          </div>
-          <div id="task-list"></div>
-        </section>
+nav button.active,
+[data-section].active {
+  background: var(--primary-light);
+  color: var(--primary);
+}
 
-        <section id="progress" class="section">
-          <h2>Mi progreso</h2>
-          <p class="subtitle">Mira todo lo que vas consiguiendo.</p>
-          <div id="progress-content"></div>
-        </section>
+main {
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 32px 6%;
+}
 
-        <section id="challenges" class="section">
-          <h2>Mis retos</h2>
-          <p class="subtitle">Pequeños objetivos, grandes avances.</p>
-          <form id="challenge-form">
-            <input id="challenge-input" type="text" placeholder="Escribe un nuevo reto..." required>
-            <button type="submit">+ Crear reto</button>
-          </form>
-          <div id="challenge-list"></div>
-        </section>
+#page-title {
+  margin: 0 0 5px;
+  font-size: 27px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+}
 
-        <section id="shared" class="section">
-          <h2>Retos compartidos</h2>
-          <p class="subtitle">Propón retos para compartir con otras personas.</p>
-          <form id="shared-form">
-            <input id="shared-input" type="text" placeholder="¿Qué reto quieres proponer?" required>
-            <button type="submit">+ Proponer reto</button>
-          </form>
-          <div id="shared-list"></div>
-        </section>
-      </main>
-    </div>
-  </div>
+#page-description {
+  margin: 0 0 25px;
+  color: var(--muted);
+  font-size: 14px;
+}
 
-  <script src="app.js"></script>
-</body>
-</html>
+#today {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 21px;
+  box-shadow: var(--shadow);
+}
+
+.stat-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.stat-card strong {
+  display: block;
+  color: var(--primary);
+  font-size: 30px;
+  font-weight: 750;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+.panel h2 {
+  margin: 0 0 17px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.panel-heading h2 {
+  margin: 0;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.task-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.task-form input,
+.field,
+#challenge-input,
+#shared-input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #fcfbff;
+  color: var(--text);
+  outline: none;
+}
+
+.task-form input:focus,
+.field:focus,
+#challenge-input:focus,
+#shared-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(118, 86, 214, 0.1);
+}
+
+.primary-btn {
+  border: 0;
+  border-radius: 11px;
+  padding: 12px 19px;
+  background: var(--primary);
+  color: white;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+
+.primary-btn:hover {
+  background: var(--primary-dark);
+}
+
+.secondary-btn {
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  padding: 9px 14px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  background: #fbfaff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.task input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  flex-shrink: 0;
+}
+
+.task span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.task.done span {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.delete-task {
+  border: 0;
+  background: transparent;
+  color: #a39caf;
+  padding: 5px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.delete-task:hover {
+  background: #fff0f0;
+  color: #d95353;
+}
+
+.empty {
+  padding: 22px 10px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.challenge {
+  padding: 17px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: #fbfaff;
+}
+
+.challenge strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.challenge p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.progress-track {
+  height: 10px;
+  margin: 16px 0;
+  background: #eeeaf7;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9678ec, #6c4bc8);
+  border-radius: 20px;
+  transition: width 0.3s;
+}
+
+form {
+  width: 100%;
+}
+
+@media (max-width: 650px) {
+  header {
+    padding: 19px 20px;
+  }
+
+  nav {
+    padding: 12px 15px;
+    gap: 5px;
+  }
+
+  nav button,
+  [data-section] {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  main {
+    padding: 25px 17px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 16px 19px;
+  }
+
+  .stat-card strong {
+    font-size: 25px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .task-form {
+    flex-direction: column;
+  }
+
+  .task-form .primary-btn {
+    width: 100%;
+  }
+  }
