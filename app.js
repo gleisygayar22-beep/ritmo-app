@@ -1,3 +1,4 @@
+
 const STORAGE_KEY = "ritmo-v1";
 const DEFAULT_CATEGORIES = ["Personal", "Trabajo", "Casa", "Estudios"];
 
@@ -5,7 +6,6 @@ function loadData() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("ritmo-data");
     const parsed = saved ? JSON.parse(saved) : {};
-
     return {
       tasks: Array.isArray(parsed.tasks) ? parsed.tasks.map(t => ({
         id: t.id || Date.now() + Math.random(),
@@ -13,7 +13,9 @@ function loadData() {
         done: Boolean(t.done),
         category: t.category || "Personal",
         date: t.date || "",
-        priority: t.priority || "Normal"
+        priority: t.priority || "Normal",
+        recurrence: t.recurrence || "",
+        customIntervalDays: t.customIntervalDays || 0
       })) : [],
       challenges: Array.isArray(parsed.challenges) ? parsed.challenges : [],
       shared: Array.isArray(parsed.shared) ? parsed.shared : [],
@@ -34,6 +36,8 @@ function loadData() {
 
 let data = loadData();
 let currentSection = "organizacion";
+let pendingTaskText = "";
+let pendingCategory = "Personal";
 
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -48,6 +52,41 @@ function escapeHTML(value) {
 
 function makeId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function localDate(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function addDays(dateString, days) {
+  const date = new Date(dateString + "T12:00:00");
+  date.setDate(date.getDate() + days);
+  return localDate(date);
+}
+
+function addMonths(dateString, months) {
+  const [year, month, day] = dateString.split("-").map(Number);
+  const result = new Date(year, month - 1 + months, 1, 12);
+  const lastDay = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+  result.setDate(Math.min(day, lastDay));
+  return localDate(result);
+}
+
+function nextTaskDate(task) {
+  const base = task.date || localDate();
+
+  if (task.recurrence === "daily") return addDays(base, 1);
+  if (task.recurrence === "weekly") return addDays(base, 7);
+  if (task.recurrence === "fortnightly") return addDays(base, 15);
+  if (task.recurrence === "monthly") return addMonths(base, 1);
+  if (task.recurrence === "custom" && task.customIntervalDays) {
+    return addDays(base, task.customIntervalDays);
+  }
+
+  return "";
 }
 
 function navigate(section) {
@@ -76,7 +115,6 @@ function render() {
   document.getElementById("page-description").textContent = heading[1];
 
   const root = document.getElementById("section-content");
-
   if (currentSection === "organizacion") root.innerHTML = renderOrganization();
   else if (currentSection === "progreso") root.innerHTML = renderProgress();
   else if (currentSection === "retos") root.innerHTML = renderChallenges();
@@ -85,7 +123,7 @@ function render() {
 
 function renderOrganization() {
   const categories = data.categories.map(category =>
-    `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`
+    `<option value="${escapeHTML(category)}" ${category === pendingCategory ? "selected" : ""}>${escapeHTML(category)}</option>`
   ).join("");
 
   const taskList = data.tasks.length
@@ -99,6 +137,13 @@ function renderOrganization() {
           <div class="task-meta">
             <span class="category-chip">${escapeHTML(task.category)}</span>
             ${task.date ? `<span class="meta-chip">Para: ${escapeHTML(task.date)}</span>` : ""}
+            ${task.recurrence ? `<span class="meta-chip">↻ ${({
+              daily: "Todos los días",
+              weekly: "Cada semana",
+              fortnightly: "Cada quince días",
+              monthly: "Cada mes",
+              custom: "Personalizado"
+            })[task.recurrence] || ""}</span>` : ""}
             ${task.priority === "Alta" ? `<span class="meta-chip">Prioridad alta</span>` : ""}
           </div>
         </div>
@@ -107,52 +152,58 @@ function renderOrganization() {
     `).join("")
     : `<div class="empty">Todavía no tienes tareas. Añade la primera cuando quieras.</div>`;
 
-  return `
-    <section class="panel">
+  const creationStep = pendingTaskText
+    ? `
+      <div class="panel-heading"><h3>Detalles de tu tarea</h3></div>
+      <p class="task-title">${escapeHTML(pendingTaskText)}</p>
+      <form id="task-details-form">
+        <div class="field">
+          <label for="task-recurrence">¿Cuándo se repite?</label>
+          <select id="task-recurrence" required>
+            <option value="daily">Todos los días</option>
+            <option value="weekly">Cada semana</option>
+            <option value="fortnightly">Cada quince días</option>
+            <option value="monthly">Cada mes</option>
+            <option value="custom">Personalizado</option>
+          </select>
+        </div>
+        <div class="field" id="custom-date-field" hidden>
+          <label for="custom-date">Elige la próxima fecha</label>
+          <input type="date" id="custom-date" min="${localDate()}">
+        </div>
+        <div class="field">
+          <label for="task-category">Categoría</label>
+          <select id="task-category">${categories}</select>
+        </div>
+        <div class="field">
+          <label for="category-name">Crear una categoría nueva</label>
+          <div class="challenge-form">
+            <input class="challenge-input" id="category-name"
+              type="text" placeholder="Ej. Gimnasio" maxlength="30">
+            <button class="secondary-btn" type="button" id="add-category">+ Crear</button>
+          </div>
+        </div>
+        <div class="task-form">
+          <button class="primary-btn" type="submit">Guardar tarea</button>
+          <button class="secondary-btn" type="button" id="cancel-task">Cancelar</button>
+        </div>
+      </form>
+    `
+    : `
       <div class="panel-heading"><h3>Añadir una tarea</h3></div>
-
       <form id="task-form">
         <div class="task-form">
           <input class="task-input" type="text" id="task-text"
             placeholder="¿Qué tienes que hacer?" maxlength="120" required>
-          <button class="primary-btn" type="submit">+ Añadir tarea</button>
-        </div>
-
-        <button class="details-toggle" type="button" id="details-toggle">
-          + Añadir detalles
-        </button>
-
-        <div class="details-fields" id="details-fields" hidden>
-          <div class="field">
-            <label for="task-category">Categoría</label>
-            <select id="task-category">${categories}</select>
-          </div>
-          <div class="field">
-            <label for="task-date">¿Para cuándo?</label>
-            <input type="date" id="task-date">
-          </div>
-          <div class="field">
-            <label for="task-priority">Prioridad</label>
-            <select id="task-priority">
-              <option value="Normal">Normal</option>
-              <option value="Alta">Alta</option>
-              <option value="Baja">Baja</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="category-name">Crear una categoría nueva</label>
-            <div class="challenge-form">
-              <input class="challenge-input" id="category-name"
-                type="text" placeholder="Ej. Gimnasio" maxlength="30">
-              <button class="secondary-btn" type="button" id="add-category">
-                + Crear
-              </button>
-            </div>
-          </div>
+          <button class="primary-btn" type="submit">Crear tarea</button>
         </div>
       </form>
-    </section>
+    `;
 
+  return `
+    <section class="panel">
+      ${creationStep}
+    </section>
     <section class="panel">
       <div class="panel-heading">
         <h3>Mis tareas</h3>
@@ -261,18 +312,17 @@ function renderShared() {
   `;
 }
 
+document.addEventListener("change", event => {
+  if (event.target.id === "task-recurrence") {
+    document.getElementById("custom-date-field").hidden =
+      event.target.value !== "custom";
+  }
+});
+
 document.addEventListener("click", async event => {
   const sectionButton = event.target.closest("[data-section]");
   if (sectionButton) {
     navigate(sectionButton.dataset.section);
-    return;
-  }
-
-  if (event.target.closest("#details-toggle")) {
-    const details = document.getElementById("details-fields");
-    details.hidden = !details.hidden;
-    document.getElementById("details-toggle").textContent =
-      details.hidden ? "+ Añadir detalles" : "− Ocultar detalles";
     return;
   }
 
@@ -291,19 +341,43 @@ document.addEventListener("click", async event => {
     }
 
     data.categories.push(name);
+    pendingCategory = name;
     saveData();
     render();
+    return;
+  }
 
-    document.getElementById("details-fields").hidden = false;
-    document.getElementById("details-toggle").textContent = "− Ocultar detalles";
-    document.getElementById("task-category").value = name;
+  if (event.target.closest("#cancel-task")) {
+    pendingTaskText = "";
+    pendingCategory = "Personal";
+    render();
     return;
   }
 
   const taskToggle = event.target.closest("[data-task-toggle]");
   if (taskToggle) {
     const task = data.tasks.find(t => String(t.id) === taskToggle.dataset.taskToggle);
-    if (task) task.done = taskToggle.checked;
+
+    if (task && taskToggle.checked && !task.done) {
+      task.done = true;
+
+      const nextDate = nextTaskDate(task);
+      if (nextDate) {
+        data.tasks.unshift({
+          id: makeId(),
+          text: task.text,
+          done: false,
+          category: task.category,
+          date: nextDate,
+          recurrence: task.recurrence,
+          customIntervalDays: task.customIntervalDays || 0,
+          priority: task.priority || "Normal"
+        });
+      }
+    } else if (task) {
+      task.done = taskToggle.checked;
+    }
+
     saveData();
     render();
     return;
@@ -344,11 +418,10 @@ document.addEventListener("click", async event => {
 
   const shareButton = event.target.closest("[data-share]");
   if (shareButton) {
-    const challenge = data.shared.find(c => String(c.id) === shareButton.dataset.share);
+    const challenge = data.shared.find(c => c.id === shareButton.dataset.share);
     if (!challenge) return;
 
     const message = `¡Te invito a participar en este reto conmigo!\n\n${challenge.text}\n\nRITMO · Tu vida, en movimiento.`;
-
     try {
       if (navigator.share) {
         await navigator.share({ title: "Invitación a un reto RITMO", text: message });
@@ -370,17 +443,47 @@ document.addEventListener("submit", event => {
     const text = document.getElementById("task-text").value.trim();
     if (!text) return;
 
+    pendingTaskText = text;
+    pendingCategory = "Personal";
+    render();
+    return;
+  }
+
+  if (event.target.id === "task-details-form") {
+    event.preventDefault();
+
+    const recurrence = document.getElementById("task-recurrence").value;
+    const category = document.getElementById("task-category").value;
+    let customIntervalDays = 0;
+
+    if (recurrence === "custom") {
+      const selectedDate = document.getElementById("custom-date").value;
+      if (!selectedDate || selectedDate <= localDate()) {
+        alert("Elige una fecha posterior a hoy en el calendario.");
+        return;
+      }
+
+      const today = new Date(localDate() + "T12:00:00");
+      const chosen = new Date(selectedDate + "T12:00:00");
+      customIntervalDays = Math.round((chosen - today) / 86400000);
+    }
+
     data.tasks.unshift({
       id: makeId(),
-      text,
+      text: pendingTaskText,
       done: false,
-      category: document.getElementById("task-category").value,
-      date: document.getElementById("task-date").value,
-      priority: document.getElementById("task-priority").value
+      category,
+      date: "",
+      priority: "Normal",
+      recurrence,
+      customIntervalDays
     });
 
+    pendingTaskText = "";
+    pendingCategory = "Personal";
     saveData();
     render();
+    return;
   }
 
   if (event.target.id === "challenge-form") {
