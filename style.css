@@ -1,559 +1,105 @@
 
-:root {
-  --primary: #6558d3;
-  --primary-dark: #5144bd;
-  --primary-light: #f1efff;
-  --background: #f8f8fc;
-  --surface: #ffffff;
-  --text: #24243a;
-  --muted: #89899d;
-  --border: #ededf3;
-  --green: #36a982;
-  --radius: 18px;
-  --shadow: 0 5px 24px rgba(35, 30, 80, 0.045);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: var(--background);
-  color: var(--text);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
-
-button, input, textarea, select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-  transition: all .2s ease;
-}
-
-.topbar {
-  height: 76px;
-  background: rgba(255,255,255,.96);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5%;
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  color: var(--text);
-  text-decoration: none;
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: 2px;
-}
-
-.brand-mark {
-  width: 39px;
-  height: 39px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #796de6, #5548c5);
-  color: white;
-  border-radius: 13px;
-  box-shadow: 0 5px 12px rgba(101,88,211,.22);
-}
-
-.tagline {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 255px 1fr;
-  min-height: calc(100vh - 76px);
-}
-
-.sidebar {
-  background: white;
-  border-right: 1px solid var(--border);
-  padding: 38px 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.menu-label {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.6px;
-  color: #aaaabd;
-  margin: 5px 12px 20px;
-}
-
-.nav-item {
-  border: 0;
-  background: transparent;
-  padding: 14px 15px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  text-align: left;
-  color: #77788e;
-  margin-bottom: 7px;
-  font-size: 14px;
-  font-weight: 550;
-}
-
-.nav-item:hover {
-  background: #f8f7ff;
-  color: var(--primary);
-}
-
-.nav-item.active {
-  background: var(--primary-light);
-  color: var(--primary);
-  font-weight: 700;
-}
-
-.sidebar-bottom {
-  margin-top: auto;
-  padding: 18px 10px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.small-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--green);
-  margin-right: 7px;
-}
-
-.content {
-  width: 100%;
-  max-width: 1180px;
-  padding: 48px 5%;
-  margin: 0 auto;
-}
-
-.welcome {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 35px;
-  gap: 15px;
-}
-
-.welcome h1 {
-  font-size: clamp(28px, 4vw, 37px);
-  letter-spacing: -1.3px;
-  font-weight: 750;
-  margin-bottom: 10px;
-}
-
-.welcome p:not(.eyebrow) {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.eyebrow {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.7px;
-  color: var(--primary);
-  margin-bottom: 12px;
-}
-
-.today {
-  color: var(--muted);
-  font-size: 13px;
-  white-space: nowrap;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 11px 15px;
-}
-
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 27px;
-  margin-bottom: 22px;
-  box-shadow: var(--shadow);
-}
-
-.panel h2 {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -.3px;
-  margin-bottom: 18px;
-}
-
-.panel-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.panel-heading h2 {
-  margin: 0;
-}
-
-.muted {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 17px;
-  margin-bottom: 23px;
-}
-
-.stat-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 23px;
-  box-shadow: var(--shadow);
-  transition: transform .2s, box-shadow .2s;
-}
-
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 9px 28px rgba(35,30,80,.08);
-}
-
-.stat-card span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 550;
-}
-
-.stat-card strong {
-  display: block;
-  font-size: 31px;
-  letter-spacing: -1px;
-  margin-top: 12px;
-  color: var(--text);
-}
-
-.primary-btn {
-  background: var(--primary);
-  color: white;
-  border: 0;
-  border-radius: 11px;
-  padding: 12px 19px;
-  font-weight: 650;
-  font-size: 13px;
-  box-shadow: 0 4px 10px rgba(101,88,211,.15);
-}
-
-.primary-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
-.secondary-btn {
-  background: var(--primary-light);
-  color: var(--primary);
-  border: 0;
-  border-radius: 10px;
-  padding: 10px 15px;
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.secondary-btn:hover {
-  background: #e7e3ff;
-}
-
-.task-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.task-form input, .field, textarea {
-  width: 100%;
-  border: 1px solid var(--border);
-  background: #fcfcfe;
-  padding: 13px 15px;
-  border-radius: 11px;
-  outline: none;
-  color: var(--text);
-  font-size: 13px;
-  transition: border .2s, box-shadow .2s;
-}
-
-.task-form input:focus, .field:focus, textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(101,88,211,.09);
-}
-
-.task-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.task {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 16px 5px;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-.task:last-child {
-  border-bottom: 0;
-}
-
-.task input {
-  accent-color: var(--primary);
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
-.task span {
-  flex: 1;
-  line-height: 1.5;
-}
-
-.task.done span {
-  color: #aaa;
-  text-decoration: line-through;
-}
-
-.delete-task {
-  border: 0;
-  background: transparent;
-  color: #aaa;
-  font-size: 19px;
-  padding: 4px 8px;
-  border-radius: 7px;
-}
-
-.delete-task:hover {
-  background: #fff0f0;
-  color: #d65d65;
-}
-
-.empty {
-  color: var(--muted);
-  padding: 20px 0;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.progress-track {
-  width: 100%;
-  height: 10px;
-  background: #eeedf5;
-  border-radius: 20px;
-  overflow: hidden;
-  margin: 17px 0;
-}
-
-.progress-fill {
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, #8275e9, #5d50ca);
-  border-radius: 20px;
-  transition: width .3s;
-}
-
-.challenge {
-  border: 1px solid var(--border);
-  padding: 19px;
-  border-radius: 13px;
-  margin-bottom: 13px;
-  background: #fff;
-  transition: border .2s, transform .2s;
-}
-
-.challenge:hover {
-  border-color: #d9d4ff;
-  transform: translateY(-2px);
-}
-
-.challenge strong {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.challenge p {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 13px;
-}
-
-.form-row {
-  display: flex;
-  gap: 10px;
-  margin: 15px 0;
-}
-
-footer {
-  padding: 38px 0 10px;
-  text-align: center;
-  color: #aaaabd;
-  font-size: 11px;
-  letter-spacing: .4px;
-}
-
-.mobile-nav {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  .topbar {
-    height: 65px;
-    padding: 0 19px;
-  }
-
-  .brand {
-    font-size: 19px;
-  }
-
-  .brand-mark {
-    width: 35px;
-    height: 35px;
-  }
-
-  .tagline {
-    font-size: 11px;
-  }
-
-  .layout {
-    display: block;
-    min-height: calc(100vh - 65px);
-  }
-
-  .sidebar {
-    display: none;
-  }
-
-  .content {
-    padding: 30px 17px 105px;
-  }
-
-  .welcome {
-    align-items: flex-start;
-    flex-direction: column;
-    margin-bottom: 25px;
-  }
-
-  .welcome h1 {
-    font-size: 29px;
-  }
-
-  .today {
-    font-size: 12px;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 11px;
-  }
-
-  .stat-card {
-    padding: 18px;
-  }
-
-  .stat-card strong {
-    font-size: 27px;
-    margin-top: 7px;
-  }
-
-  .panel {
-    padding: 19px;
-    border-radius: 15px;
-  }
-
-  .task-form {
-    flex-direction: column;
-  }
-
-  .task-form .primary-btn {
-    width: 100%;
-  }
-
-  .mobile-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255,255,255,.97);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid var(--border);
-    justify-content: space-around;
-    padding: 10px 4px calc(10px + env(safe-area-inset-bottom));
-    z-index: 30;
-  }
-
-  .mobile-nav button {
-    border: 0;
-    background: transparent;
-    color: var(--muted);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    font-size: 19px;
-    padding: 5px 8px;
-    min-width: 65px;
-  }
-
-  .mobile-nav button span {
-    font-size: 10px;
-  }
-
-  .mobile-nav button.active {
-    color: var(--primary);
-    font-weight: 750;
-  }
-
-  footer {
-    padding-bottom: 15px;
-  }
-}
-
-@media (min-width: 761px) and (max-width: 1000px) {
-  .layout {
-    grid-template-columns: 220px 1fr;
-  }
-
-  .content {
-    padding: 38px 3%;
-  }
-
-  .stats-grid {
-    gap: 10px;
-  }
-
-  .stat-card {
-    padding: 17px;
-  }
-    }
-  
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7256d8">
+  <title>RITMO | Tu vida, en movimiento</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">R</span>
+        <div>
+          <h1>RITMO</h1>
+          <p>Tu vida, en movimiento</p>
+        </div>
+      </div>
+      <span id="today"></span>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <p class="menu-label">MENÚ PRINCIPAL</p>
+        <button class="nav-button active" data-section="organization">Mi organización</button>
+        <button class="nav-button" data-section="progress">Mi progreso</button>
+        <button class="nav-button" data-section="challenges">Mis retos</button>
+        <button class="nav-button" data-section="shared">Retos compartidos</button>
+      </aside>
+
+      <main class="content">
+        <section id="organization" class="section active">
+          <h2>Mi organización</h2>
+          <p class="subtitle">Organiza tus tareas y avanza a tu ritmo.</p>
+
+          <form id="task-form" class="task-form">
+            <input id="task-input" type="text" placeholder="¿Qué tienes pendiente?" required>
+
+            <div class="task-options">
+              <label>Fecha límite
+                <input id="task-date" type="date">
+              </label>
+
+              <label>Prioridad
+                <select id="task-priority">
+                  <option value="Media">Media</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Baja">Baja</option>
+                </select>
+              </label>
+
+              <label>Categoría
+                <select id="task-category"></select>
+              </label>
+            </div>
+
+            <div class="category-creator">
+              <input id="new-category" type="text" placeholder="Nombre de una nueva categoría">
+              <button type="button" id="add-category">+ Crear categoría</button>
+            </div>
+
+            <div id="category-list"></div>
+            <button type="submit">+ Añadir tarea</button>
+          </form>
+
+          <div class="task-summary">
+            <span id="pending-count">0 tareas pendientes</span>
+          </div>
+          <div id="task-list"></div>
+        </section>
+
+        <section id="progress" class="section">
+          <h2>Mi progreso</h2>
+          <p class="subtitle">Mira todo lo que vas consiguiendo.</p>
+          <div id="progress-content"></div>
+        </section>
+
+        <section id="challenges" class="section">
+          <h2>Mis retos</h2>
+          <p class="subtitle">Pequeños objetivos, grandes avances.</p>
+          <form id="challenge-form">
+            <input id="challenge-input" type="text" placeholder="Escribe un nuevo reto..." required>
+            <button type="submit">+ Crear reto</button>
+          </form>
+          <div id="challenge-list"></div>
+        </section>
+
+        <section id="shared" class="section">
+          <h2>Retos compartidos</h2>
+          <p class="subtitle">Propón retos para compartir con otras personas.</p>
+          <form id="shared-form">
+            <input id="shared-input" type="text" placeholder="¿Qué reto quieres proponer?" required>
+            <button type="submit">+ Proponer reto</button>
+          </form>
+          <div id="shared-list"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
