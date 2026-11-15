@@ -168,7 +168,7 @@ function renderOrganization() {
           </select>
         </div>
         <div class="field" id="custom-date-field" hidden>
-          <label for="custom-date">Elige la próxima fecha</label>
+          <label for="custom-date">Calendario</label>
           <input type="date" id="custom-date" min="${localDate()}">
         </div>
         <div class="field">
