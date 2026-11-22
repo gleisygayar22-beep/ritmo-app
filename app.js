@@ -35,7 +35,7 @@ function loadData() {
 }
 
 let data = loadData();
-let currentSection = "organizacion";
+let currentSection = "inicio";
 let pendingTaskText = "";
 let pendingCategory = "Personal";
 
@@ -101,7 +101,17 @@ function updateNavigation() {
 }
 
 function render() {
-  updateNavigation();
+  const home = document.getElementById("home-screen");
+  const sectionScreen = document.getElementById("section-screen");
+
+  if (currentSection === "inicio") {
+    home.hidden = false;
+    sectionScreen.hidden = true;
+    return;
+  }
+
+  home.hidden = true;
+  sectionScreen.hidden = false;
 
   const titles = {
     organizacion: ["Mi organización", "Organiza tus tareas y pon orden a tu día."],
@@ -111,14 +121,16 @@ function render() {
   };
 
   const heading = titles[currentSection] || titles.organizacion;
+
   document.getElementById("page-title").textContent = heading[0];
   document.getElementById("page-description").textContent = heading[1];
 
   const root = document.getElementById("section-content");
+
   if (currentSection === "organizacion") root.innerHTML = renderOrganization();
   else if (currentSection === "progreso") root.innerHTML = renderProgress();
   else if (currentSection === "retos") root.innerHTML = renderChallenges();
-  else root.innerHTML = renderShared();
+  else if (currentSection === "compartidos") root.innerHTML = renderShared();
 }
 
 function renderOrganization() {
@@ -319,7 +331,10 @@ document.addEventListener("change", event => {
   }
 });
 
-document.addEventListener("click", async event => {
+document.addEventListener("click", async event => {  if (event.target.closest("#back-home")) {
+    navigate("inicio");
+    return;
+}
   const sectionButton = event.target.closest("[data-section]");
   if (sectionButton) {
     navigate(sectionButton.dataset.section);
