@@ -22,19 +22,53 @@
     </header>
 
     <main>
-      <nav class="navigation" aria-label="Navegación principal">
-        <button class="nav-button active" data-section="organizacion">Mi organización</button>
-        <button class="nav-button" data-section="progreso">Mi progreso</button>
-        <button class="nav-button" data-section="retos">Mis retos</button>
-        <button class="nav-button" data-section="compartidos">Retos compartidos</button>
-      </nav>
+      <section id="home-screen" class="home-screen">
+        <div class="welcome">
+          <h2>¡Bienvenida a RITMO!</h2>
+          <p>Organiza tu vida, alcanza tus metas y avanza a tu ritmo.</p>
+        </div>
 
-      <section class="page-heading">
-        <h2 id="page-title">Mi organización</h2>
-        <p id="page-description">Organiza tus tareas y pon orden a tu día.</p>
+        <div class="home-grid">
+          <button class="home-card organization-card" data-section="organizacion">
+            <span class="home-icon">✓</span>
+            <span class="home-card-title">Mi organización</span>
+            <span class="home-card-description">Organiza tus tareas y tu día</span>
+            <span class="home-arrow">→</span>
+          </button>
+
+          <button class="home-card challenges-card" data-section="retos">
+            <span class="home-icon">◎</span>
+            <span class="home-card-title">Mis retos</span>
+            <span class="home-card-description">Ponte objetivos y supérate</span>
+            <span class="home-arrow">→</span>
+          </button>
+
+          <button class="home-card progress-card" data-section="progreso">
+            <span class="home-icon">↗</span>
+            <span class="home-card-title">Mi progreso</span>
+            <span class="home-card-description">Descubre cuánto has avanzado</span>
+            <span class="home-arrow">→</span>
+          </button>
+
+          <button class="home-card shared-card" data-section="compartidos">
+            <span class="home-icon">♡</span>
+            <span class="home-card-title">Retos compartidos</span>
+            <span class="home-card-description">Comparte tus retos con alguien</span>
+            <span class="home-arrow">→</span>
+          </button>
+        </div>
       </section>
 
-      <div id="section-content"></div>
+      <section id="section-screen" hidden>
+        <button type="button" id="back-home" class="back-home">← Volver al inicio</button>
+
+        <section class="page-heading">
+          <h2 id="page-title"></h2>
+          <p id="page-description"></p>
+        </section>
+
+        <div id="section-content"></div>
+      </section>
     </main>
 
     <footer class="app-footer">
@@ -42,4 +76,5 @@
     </footer>
   </div>
 </body>
-</html>
+        </html>
+
