@@ -434,3 +434,152 @@ button {
     font-size: 11px;
   }
 }
+
+/* PANTALLA PRINCIPAL */
+
+.home-screen {
+  padding-top: 10px;
+}
+
+.welcome {
+  margin-bottom: 28px;
+}
+
+.welcome h2 {
+  margin: 0;
+  font-size: 27px;
+  letter-spacing: -0.7px;
+}
+
+.welcome p {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.home-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 190px;
+  padding: 23px;
+  border: 0;
+  border-radius: 19px;
+  color: white;
+  text-align: left;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.home-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 24px rgba(43, 30, 85, 0.14);
+}
+
+.organization-card {
+  background: #7254c8;
+}
+
+.challenges-card {
+  background: #e69a48;
+}
+
+.progress-card {
+  background: #3fa78a;
+}
+
+.shared-card {
+  background: #d879a5;
+}
+
+.home-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  margin-bottom: 18px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.home-card-title {
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.home-card-description {
+  margin-top: 7px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.home-arrow {
+  position: absolute;
+  right: 22px;
+  bottom: 19px;
+  font-size: 23px;
+}
+
+.back-home {
+  margin: 5px 0 12px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--purple-light);
+  color: var(--purple);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.back-home:hover {
+  background: #e7e0f8;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 650px) {
+  .home-grid {
+    gap: 12px;
+  }
+
+  .home-card {
+    min-height: 165px;
+    padding: 17px;
+  }
+
+  .home-card-title {
+    font-size: 16px;
+  }
+
+  .home-card-description {
+    font-size: 11px;
+  }
+
+  .home-arrow {
+    right: 15px;
+    bottom: 13px;
+  }
+
+  .welcome h2 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+  }
